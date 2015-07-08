@@ -3,6 +3,7 @@ package com.zwb.simpleasynctask;
 import android.annotation.TargetApi;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.widget.ProgressBar;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,12 +24,12 @@ final class Tasks {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static <K, T> String executeInBackground(K attachment, BackgroundCallback<T> backgroundCallback, DoneCallback<K, T> doneCallback, FailCallback<K> failCallback) {
+    public static <K, T> String executeInBackground(K attachment, BackgroundCallback<T> backgroundCallback, DoneCallback<K, T> doneCallback, FailCallback<K> failCallback, ProgressBar progressBar) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            return executeInBackground(attachment, backgroundCallback, doneCallback, failCallback, AsyncTask.THREAD_POOL_EXECUTOR);
+            return executeInBackground(attachment, backgroundCallback, doneCallback, failCallback, progressBar, AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
             String tag = attachment.getClass().getSimpleName() + "_" + index++;
-            Task task = new Task<>(attachment, backgroundCallback, doneCallback, failCallback);
+            Task task = new Task<>(attachment, backgroundCallback, doneCallback, failCallback, progressBar);
             taskMap.put(tag, task);
             task.execute();
             return tag;
@@ -36,10 +37,10 @@ final class Tasks {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public static <K, T> String executeInBackground(K attachment, BackgroundCallback<T> backgroundCallback, DoneCallback<K, T> doneCallback, FailCallback<K> failCallback, Executor executor) {
+    public static <K, T> String executeInBackground(K attachment, BackgroundCallback<T> backgroundCallback, DoneCallback<K, T> doneCallback, FailCallback<K> failCallback, ProgressBar progressBar, Executor executor) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             String tag = attachment.getClass().getSimpleName() + "_" + index++;
-            Task task = new Task<>(attachment, backgroundCallback, doneCallback, failCallback);
+            Task task = new Task<>(attachment, backgroundCallback, doneCallback, failCallback, progressBar);
             taskMap.put(tag, task);
             task.executeOnExecutor(executor);
             return tag;

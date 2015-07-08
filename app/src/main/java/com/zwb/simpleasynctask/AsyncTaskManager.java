@@ -1,5 +1,7 @@
 package com.zwb.simpleasynctask;
 
+import android.widget.ProgressBar;
+
 /**
  * 异步任务类
  * Created by zwb on 2015/6/29.
@@ -8,6 +10,7 @@ public class AsyncTaskManager<K> {
     private BackgroundCallback backgroundCallback;
     private DoneCallback doneCallback;
     private FailCallback failCallback;
+    private ProgressBar progressBar;
     private K attachment;
 
     /**
@@ -26,7 +29,7 @@ public class AsyncTaskManager<K> {
      * @param <T>
      * @return
      */
-    public <T> AsyncTaskManager background(BackgroundCallback<T> callback) {
+    public <T> AsyncTaskManager when(BackgroundCallback<T> callback) {
         this.backgroundCallback = callback;
         return this;
     }
@@ -61,7 +64,7 @@ public class AsyncTaskManager<K> {
      * @return
      */
     public String run() {
-        return Tasks.executeInBackground(attachment, backgroundCallback, doneCallback, failCallback);
+        return Tasks.executeInBackground(attachment, backgroundCallback, doneCallback, failCallback, progressBar);
     }
 
     /**
@@ -78,5 +81,16 @@ public class AsyncTaskManager<K> {
      */
     public void cancelAll() {
         Tasks.cancelAll(attachment);
+    }
+
+    /**
+     * 设置进度,暂时只能支持圆形进度条
+     *
+     * @param progressBar
+     * @return
+     */
+    public AsyncTaskManager progress(ProgressBar progressBar) {
+        this.progressBar = progressBar;
+        return this;
     }
 }
