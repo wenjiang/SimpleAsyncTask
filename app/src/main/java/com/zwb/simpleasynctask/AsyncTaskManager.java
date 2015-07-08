@@ -29,7 +29,7 @@ public class AsyncTaskManager<K> {
      * @param <T>
      * @return
      */
-    public <T> AsyncTaskManager when(BackgroundCallback<T> callback) {
+    public <T> AsyncTaskManager background(BackgroundCallback<T> callback) {
         this.backgroundCallback = callback;
         return this;
     }
